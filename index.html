@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b111b">
+  <meta name="description" content="《無職轉生～到了異世界就拿出真本事～》角色圖鑑：搜尋、篩選並查看角色資料。">
+  <title>無職轉生｜角色圖鑑</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800&family=Cinzel:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="sky-glow" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="返回圖鑑首頁"><span class="brand-mark">✦</span><span>MUSHOKU<span class="brand-sub">TENSEI ARCHIVE</span></span></a>
+    <a class="source-link" href="https://mushokutensei.jp/character/" target="_blank" rel="noreferrer">官方角色頁 <span aria-hidden="true">↗</span></a>
+  </header>
+  <main id="top">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy"><p class="eyebrow"><span></span> THE SIX-SIDED WORLD · CHARACTER ARCHIVE</p>
+        <h1 id="page-title">無職轉生<span class="title-divider">｜</span><em>角色圖鑑</em></h1>
+        <p class="hero-description">踏上六面世界的旅程，認識那些在命運交會之處留下足跡的人。</p>
+      </div>
+      <div class="hero-seal" aria-hidden="true"><span>六面世界</span><b>✧</b><small>THE WORLD</small></div>
+    </section>
+
+    <section class="archive" aria-label="角色列表">
+      <div class="archive-heading"><div><p class="section-kicker">CHARACTER INDEX</p><h2>旅人名錄 <span>／</span> <small>第一卷</small></h2></div><p class="result-count" aria-live="polite"><strong id="result-count">9</strong><span> 位角色</span></p></div>
+      <div class="toolbar">
+        <label class="search-box" for="search-input"><span class="search-icon" aria-hidden="true">⌕</span><input id="search-input" type="search" placeholder="搜尋角色姓名…" autocomplete="off"><button id="clear-search" class="clear-search" type="button" aria-label="清除搜尋" title="清除搜尋">×</button></label>
+        <label class="filter-label" for="filter-select"><span>篩選名錄</span><select id="filter-select"><option value="all">全部角色</option></select></label>
+      </div>
+      <div id="active-filter" class="active-filter" hidden></div>
+      <div id="character-grid" class="character-grid"></div>
+      <div id="empty-state" class="empty-state" hidden><span>⌕</span><h3>沒有找到這位旅人</h3><p>試試其他姓名，或清除篩選條件。</p><button id="reset-empty" type="button">顯示全部角色</button></div>
+      <p class="data-note"><span>✦</span> 配偶關係與七大列強名次含「小說劇透」；相關資料依使用者提供的角色對照。圖片由使用者提供。</p>
+    </section>
+  </main>
+  <footer class="site-footer"><span>無職轉生｜角色圖鑑</span><span>AN ARCHIVE FOR THE SIX-SIDED WORLD</span></footer>
+
+  <dialog id="character-dialog" class="character-dialog" aria-labelledby="dialog-name">
+    <button class="modal-close" id="modal-close" type="button" aria-label="關閉視窗">×</button>
+    <div id="modal-content"></div>
+  </dialog>
+</body>
+</html>
