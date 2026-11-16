@@ -13,8 +13,8 @@ function element(tag, className, text) {
   return node;
 }
 
-function sourceLink(source) {
-  const link = element('a', 'source-link', '官方資料來源 ↗');
+function sourceLink(source, label = '官方資料來源 ↗') {
+  const link = element('a', 'source-link', label);
   link.href = source;
   link.target = '_blank';
   link.rel = 'noopener noreferrer';
@@ -26,8 +26,27 @@ function makeCard(character) {
   const detail = element('details', 'character-detail');
   const summary = element('summary', 'card-summary');
   const top = element('div', 'card-top');
-  top.setAttribute('aria-hidden', 'true');
-  top.append(element('span', 'archive-label', 'PRISONER ARCHIVE'), element('span', 'archive-number', character.id), element('span', 'star', '✦'));
+  const placeholder = element('div', 'portrait-placeholder');
+  placeholder.setAttribute('aria-hidden', 'true');
+  placeholder.append(element('span', 'archive-label', 'PRISONER ARCHIVE'), element('span', 'archive-number', character.id), element('span', 'star', '✦'));
+  top.append(placeholder);
+  if (character.image) {
+    const image = document.createElement('img');
+    image.className = 'character-portrait';
+    image.alt = `${character.displayName}（${character.name}）角色圖`;
+    image.width = 640;
+    image.height = 480;
+    image.loading = 'lazy';
+    image.decoding = 'async';
+    // Keep the decorative fallback available if a local asset fails to load.
+    image.addEventListener('error', () => {
+      image.remove();
+      top.classList.remove('has-portrait');
+    }, { once: true });
+    image.src = character.image;
+    top.classList.add('has-portrait');
+    top.append(image);
+  }
   const body = element('div', 'card-body');
   body.append(
     element('span', 'serial', `囚人編號 ${character.id}`),
@@ -42,7 +61,9 @@ function makeCard(character) {
   const content = element('div', 'detail-content');
   content.append(element('h4', '', '角色介紹'), element('p', 'desc', character.description), element('p', 'detail-note', '僅整理官方公開基本設定；未公開資訊不作推測。'), sourceLink(character.source));
   detail.append(summary, content);
-  card.append(detail);
+  const imageSource = element('div', 'card-image-source');
+  imageSource.append(sourceLink(character.source, '前往官方查看角色圖片 ↗'));
+  card.append(detail, imageSource);
   return card;
 }
 
@@ -61,17 +82,21 @@ function render() {
   cards.append(...matches.map(makeCard));
 }
 
-// Keep the repository's existing six-field JSON format and stable prisoner IDs.
+// Preserve the six existing fields; image is an optional local, licensed asset.
 function validateCharacters(data) {
   const fields = ['id', 'name', 'displayName', 'description', 'magic', 'source'];
   const ids = new Set();
   const names = new Set();
   if (!Array.isArray(data) || !data.length) throw new Error('角色資料必須是非空陣列');
   for (const character of data) {
-    if (!character || Object.keys(character).length !== fields.length ||
+    if (!character || Object.keys(character).some(key => ![...fields, 'image'].includes(key)) ||
       !fields.every(key => typeof character[key] === 'string' && character[key].trim()) ||
       !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(character.id) || ids.has(character.id) || names.has(character.name)) {
       throw new Error('角色欄位不完整或重複');
+    }
+    if (character.image !== undefined && (typeof character.image !== 'string' ||
+      (character.image !== '' && !/^\.\/assets\/characters\/[a-z0-9-]+\.(?:png|jpe?g|webp|avif)$/.test(character.image)))) {
+      throw new Error('角色圖片須為 assets/characters/ 下的站內相對路徑');
     }
     const source = new URL(character.source);
     if (source.protocol !== 'https:' || source.hostname !== 'manosaba.com') throw new Error('來源須為官方網站');

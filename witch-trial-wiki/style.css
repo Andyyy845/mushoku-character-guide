@@ -556,3 +556,35 @@ footer p:first-child {
   min-height:4.6em;
   margin:0 0 18px;
 }
+
+/* Licensed portraits are optional. Empty or broken images retain the fallback. */
+.card-top {
+  height: auto;
+  aspect-ratio: 4 / 3;
+}
+.portrait-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.character-portrait {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #1a1522;
+}
+.has-portrait .portrait-placeholder {
+  visibility: hidden;
+}
+.card-image-source {
+  border-top: 1px solid var(--line);
+  padding: 12px 24px;
+}
+.card-image-source a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
