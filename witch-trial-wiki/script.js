@@ -34,8 +34,8 @@ function makeCard(character) {
     const image = document.createElement('img');
     image.className = 'character-portrait';
     image.alt = `${character.displayName}（${character.name}）角色圖`;
-    image.width = 640;
-    image.height = 480;
+    image.width = 900;
+    image.height = 1200;
     image.loading = 'lazy';
     image.decoding = 'async';
     // Keep the decorative fallback available if a local asset fails to load.

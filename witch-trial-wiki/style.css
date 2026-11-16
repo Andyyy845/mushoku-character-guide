@@ -588,3 +588,8 @@ footer p:first-child {
   align-items: center;
   min-height: 44px;
 }
+
+/* Preserve the complete user-supplied portrait, including its Japanese label. */
+.card-top.has-portrait {
+  aspect-ratio: 3 / 4;
+}
