@@ -1,21 +1,79 @@
 # 魔法少女的魔女審判｜無劇透角色百科
 
-非官方繁體中文角色百科。以《魔法少女ノ魔女裁判》官方公開角色資料為依據，整理 13 位角色的簡介、囚人編號與已公開魔法，不涉及劇情解答。
+以官方公開設定製作的繁體中文非官方粉絲角色百科。提供 13 位角色的簡短介紹、囚人編號與已公開魔法；不整理案件答案或後期劇情。黑紫、暗紅與金色的哥德介面使用 CSS 自製裝飾，不使用未經授權的遊戲圖片。
 
-## 功能
-- 搜尋中文暫譯名、日文原名、囚人編號
-- 篩選官方已公開／未公開魔法
-- 展開角色資訊，支援手機版
-- 使用 `characters.json` 作為唯一資料來源
+## 專案入口
 
-## 開發規則
-請先閱讀同資料夾的 [`AGENTS.md`](./AGENTS.md)。新增角色時只需遵循欄位規範，編輯 `characters.json`，不用改寫 HTML。
+- Repository：https://github.com/Andyyy845/mushoku-character-guide
+- 網頁：https://andyyy845.github.io/mushoku-character-guide/witch-trial-wiki/ （需合併分支且啟用 GitHub Pages 才會呈現新版）
+- 開發規則：[`AGENTS.md`](./AGENTS.md)
+- 本站入口為此層 `index.html`；內部同名資料夾為既有副本，此次未變更。
+
+## 結構與功能
+
+| 檔案 | 用途 |
+| --- | --- |
+| `index.html` | 語意化首頁、搜尋與分類、非官方聲明、返回頂部 |
+| `style.css` | 主題配色、卡片、桌面多欄／手機單欄、焦點及減少動畫 |
+| `script.js` | 安全 DOM 渲染、資料檢查、搜尋、分類、重設、失敗重試 |
+| `characters.json` | 唯一角色內容來源，維持既有六欄格式 |
+| `AGENTS.md` | 後續 AI 必須先讀的內容、開發與驗收規則 |
+
+不需框架、套件、編譯、API 金鑰或外部字型。所有站內資源採相對路徑，支援 GitHub Pages 子路徑。
 
 ## 本機預覽
-在此資料夾執行 `python -m http.server 8000`，開啟 `http://localhost:8000/`。直接雙擊 HTML 可能因瀏覽器限制無法讀取 JSON。
 
-## GitHub Pages
-將整個 `witch-trial-wiki` 資料夾放在 Repository 根目錄。若原專案已啟用 main / root 的 GitHub Pages，網址為 `https://<username>.github.io/<repository>/witch-trial-wiki/`。若未啟用，前往 Settings → Pages → Deploy from a branch → main / (root)。
+在 Repository 根目錄執行：
+
+```sh
+python -m http.server 8000
+```
+
+瀏覽 `http://localhost:8000/witch-trial-wiki/`。勿直接雙擊 HTML，否則瀏覽器可能阻擋 JSON 讀取。
+
+## 如何讓 AI 繼續新增內容
+
+請 AI 先閱讀 `AGENTS.md`、`characters.json` 與 `script.js`，再核對官方角色區。複製以下物件到 JSON 陣列，以新角色的已驗證資料取代內容，保留六欄及字串格式：
+
+```json
+{
+  "id": "658",
+  "name": "桜羽エマ",
+  "displayName": "櫻羽艾瑪",
+  "description": "樂觀開朗、關心他人，也很在意自己是否被討厭。",
+  "magic": "未公開",
+  "source": "https://manosaba.com/"
+}
+```
+
+此例為既有角色，不能直接重複加入。`id` 與 `name` 不得重複；既有 id 不可變更。中文名由卡片統一標註暫譯，魔法未知就填「未公開」。`script.js` 會自動產生卡片、搜尋與篩選結果，無需為每個角色改 HTML、CSS 或 JavaScript。沒有官方囚人編號的角色，須依 AGENTS.md 先調整編號顯示規則。
+
+可重用的提示：
+
+> 請先閱讀 witch-trial-wiki/AGENTS.md，核對官網公開角色區，依既有六欄 JSON 格式加入一位尚未收錄的角色。不要變更既有 id、不要推測未知資訊，不使用遊戲圖片。測試搜尋、分類、展開、手機排版及錯誤狀態，只修改 witch-trial-wiki/，以獨立分支提交 PR，列出來源及核對日期。
+
+這套規則將資料、呈現與內容安全分開，後續 AI 能沿用同一個流程擴充內容，避免每次重新設計頁面或自行猜測資料。
+
+## 驗收與部署
+
+1. 測試中文、日文、編號、前後空白及無結果搜尋，再與已公開／未公開分類交叉使用，重設應回到全部角色。
+2. 點擊卡片及用 Tab、Enter／空白鍵測試展開收合，確認簡介、魔法及官方來源；手機不能有水平捲動。
+3. 確認 JSON 請求失敗或格式錯誤時顯示明確訊息，修復後「重新載入」可恢復。
+4. 在桌面與 390px 手機檢查排版、焦點、返回頂部及減少動畫設定。
+5. 執行 `git diff --name-only main...HEAD` 確認所有差異都在 `witch-trial-wiki/`，以 PR 審查後才合併。
+
+沿用 Repository 既有 GitHub Pages 設定；若設定為 main / root，合併後使用上述子路徑。此修改不更動根目錄《無職轉生》入口或部署設定。
 
 ## 資料來源及聲明
-官方網站：https://manosaba.com/ 。所有中文角色名均為本站暫譯，請以官方日文名稱為準。本站非官方，不使用未獲授權的官方角色圖片。
+
+2026-11-16 核對 https://manosaba.com/ 的「06. Character」公開角色區：現有 13 位的日文姓名、囚人編號、短介所述特徵及公開魔法相符，未更動 JSON 內容。僅作短篇原創摘要；中文姓名皆為本站暫譯。未公開魔法維持「未公開」。未收錄官方網站其他新聞、案件或後續劇情。
+
+## 作業繳交說明
+
+專案主題是以一套可重用的 AI 開發規則維護無劇透角色百科。繳交時可附上本頁的專案簡介、Repository 與網頁連結，以及 `AGENTS.md` 全文；「如何讓 AI 繼續新增內容」章節說明規則如何支援擴充。請在合併與部署完成後親自確認公開網址可瀏覽新版，再填寫自己的學校、學號、系級及姓名。
+
+### 本次驗證紀錄（2026-11-16）
+
+使用本機 HTTP 伺服器與 Chromium／Playwright 驗證：13 張卡片正常載入；中文、日文、編號、前後空白、空字串與無結果搜尋通過；公開魔法分類 5 位、未公開 8 位，支援交叉篩選與重設。滑鼠、Enter 及空白鍵可展開收合，詳細內容未被卡片裁切、官方連結可取得鍵盤焦點。320、390、600、768、1024、1440px 均無水平溢出，手機單欄、桌面多欄。返回頂部與減少動畫設定通過。HTTP 失敗、無效 JSON、不合 schema、重複 id 及非官方來源皆會顯示錯誤，恢復資料後重試成功。沒有瀏覽器 JavaScript 錯誤。
+
+`git diff --check` 通過；所有差異均位於 `witch-trial-wiki/`，`characters.json` 與原《無職轉生》網站檔案未變更。公開 Pages 舊版入口回應 HTTP 200；新版仍須 PR 合併後才會上線。
